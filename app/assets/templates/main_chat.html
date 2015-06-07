@@ -1,0 +1,12 @@
+
+Main Chat
+
+<div ng-repeat="message in allMessages">
+ <span>{{message.text}}| {{message.created_at | date:'medium'}}| {{message.user_id}}</span>
+
+</div>
+
+<form ng-controller="NewCtrl">
+    <span>Current User {{currentUser}}</span><input type="text" ng-model="newMessage.text">
+    <button ng-click="submitNewMessage()">Submit</button>
+</form>

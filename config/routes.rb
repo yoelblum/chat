@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root :to=> 'raffle#index'
-  resources :todos
+  root :to=> 'main#index'
+  resources :messages
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
