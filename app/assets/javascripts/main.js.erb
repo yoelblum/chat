@@ -1,0 +1,85 @@
+///**
+// * Created by joelb on 6/3/2015.
+// */
+var app = angular.module('myApp', ['ngRoute']);
+
+//routes
+app.config(['$routeProvider',
+    function ($routeProvider) {
+        $routeProvider.
+                when('/all_todos', {
+                    templateUrl: "/assets/all_todos.html",
+                    controller: 'TodosCtrl'
+                }).
+                when('/edit/:id', {
+                    templateUrl: "/assets/edit.html",
+                    controller: "EditCtrl"
+                }).
+                when('/new', {
+                    templateUrl: "/assets/new.html",
+                    controller: "NewCtrl"
+                })
+
+    }]);
+
+//controllers
+app.controller('NewCtrl', ['$scope', 'todos', function ($scope, todos) {
+    $scope.newTodo = {"text": ""};
+    $scope.submitNewTodo = function () {
+        todos.create({"todo": $scope.newTodo.text});
+    };
+
+
+}]).controller('EditCtrl', ['$scope', 'todos', '$routeParams', function($scope, todos, $routeParams){
+    console.log("id is :", $routeParams);
+    $scope.id = $routeParams.id;
+
+    $scope.edit = function() {
+        todos.edit($scope, $scope.id);
+    }
+    todos.show($scope, $routeParams.id);
+}])
+
+app.controller("TodosCtrl", ['$scope', 'todos', function ($scope, todos) {
+    todos.index($scope);
+}]);
+
+//constants
+app.constant("myConfig", {
+    "api": "http://localhost:3000/"
+});
+
+//services
+
+app.factory('todos', ['$q', '$http', 'myConfig', function ($q, $http, myConfig) {
+
+    return {
+        index: function (scope) {
+            $http.get(myConfig.api + "todos").then(function (res) {
+                console.log(res);
+                scope.allTodos = res['data'];
+            }, function (res) {
+                alert("call failed", res);
+            });
+        },
+        create: function (todo) {
+            $http.post(myConfig.api + "todos", todo);
+        },
+        show: function(scope, id) {
+            $http.get(myConfig.api + "todos/" + id)
+                    .then(function(res){
+                        scope.todo = res['data'];
+                    },function(res){
+                        alert("call failed", res);
+                    });
+        },
+        edit: function(scope, id) {
+            $http.put(myConfig.api + "todos/" + id, scope.todo).then(function(res){
+                scope.todo = res['data'];
+                scope.text = scope.todo.text;
+            }, function(){
+
+            });
+        }
+    }
+}]);
