@@ -22,11 +22,12 @@ app.config(['$routeProvider',
 app.controller('NewCtrl', ['$scope', 'chatService', function ($scope, chatService) {
     $scope.newMessage = {"text": ""};
     $scope.submitNewMessage = function () {
-        chatService.create({"message": $scope.newMessage.text});
+        chatService.create({"message": $scope.newMessage.text}, $scope);
     };
 }]);
 
 app.controller("ChatCtrl", ['$scope', 'chatService', '$interval', function ($scope, chatService, $interval) {
+    chatService.index($scope);
     $interval(function(){
         chatService.index($scope);
     }, 2000);
@@ -50,8 +51,12 @@ app.factory('chatService', ['$q', '$http', 'myConfig', function ($q, $http, myCo
                 alert("call failed", res);
             });
         },
-        create: function (message) {
-            $http.post(myConfig.api + "messages", message);
+        create: function (message, scope) {
+            $http.post(myConfig.api + "messages", message).then(function(){
+                scope.newMessage.text = "";
+            }, function(){
+                alert("create failed");
+            });
         },
         show: function(scope, id) {
             $http.get(myConfig.api + "messages/" + id)

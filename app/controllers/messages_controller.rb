@@ -18,11 +18,11 @@ class MessagesController < ApplicationController
 
   private
 
-  def todo_params
-    # It's mandatory to specify the nested attributes that should be whitelisted.
-    # If you use `permit` with just the key that points to the nested attributes hash,
-    # it will return an empty hash.
-    params.require(:message).permit(:text)
-  end
+  # def todo_params
+  #   # It's mandatory to specify the nested attributes that should be whitelisted.
+  #   # If you use `permit` with just the key that points to the nested attributes hash,
+  #   # it will return an empty hash.
+  #   params.require(:message).permit(:text)
+  # end
 
 end
