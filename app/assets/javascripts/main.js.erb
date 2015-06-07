@@ -28,6 +28,7 @@ app.controller('NewCtrl', ['$scope', 'chatService', function ($scope, chatServic
 
 app.controller("ChatCtrl", ['$scope', 'chatService', '$interval', function ($scope, chatService, $interval) {
     chatService.index($scope);
+    //this would probably be some websocket implementation in a real app
     $interval(function(){
         chatService.index($scope);
     }, 2000);
