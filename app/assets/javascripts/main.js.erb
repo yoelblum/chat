@@ -14,10 +14,6 @@ app.config(['$routeProvider',
                 when('/', {
                     templateUrl: "/assets/main_chat.html",
                     controller: 'ChatCtrl'
-                }).
-                when('/new', {
-                    templateUrl: "/assets/new.html",
-                    controller: "NewCtrl"
                 })
 
     }]);
@@ -30,8 +26,10 @@ app.controller('NewCtrl', ['$scope', 'chatService', function ($scope, chatServic
     };
 }]);
 
-app.controller("ChatCtrl", ['$scope', 'chatService', function ($scope, chatService) {
-    chatService.index($scope);
+app.controller("ChatCtrl", ['$scope', 'chatService', '$interval', function ($scope, chatService, $interval) {
+    $interval(function(){
+        chatService.index($scope);
+    }, 2000);
 }]);
 
 //constants
